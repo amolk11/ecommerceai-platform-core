@@ -1,21 +1,16 @@
-import hashlib
 import os
 import sys
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
-
-def hash_api_key(api_key: str) -> str:
-    return hashlib.sha256(api_key.encode()).hexdigest()
+from platform_core.auth import validate_api_key
 
 
 def main() -> None:
 
     if len(sys.argv) != 2:
-        print(
-            "Usage: python scripts/validate_api_key.py <api_key>"
-        )
+        print("Usage: python scripts/validate_api_key.py <api_key>")
         sys.exit(1)
 
     api_key = sys.argv[1]
@@ -27,32 +22,14 @@ def main() -> None:
     if not database_url:
         raise ValueError("DATABASE_URL not found")
 
-    api_key_hash = hash_api_key(api_key)
-
     engine = create_engine(database_url)
 
     with engine.connect() as connection:
 
-        result = connection.execute(
-            text(
-                """
-                SELECT
-                    api_key_id,
-                    client_id,
-                    is_active
-                FROM api_keys
-                WHERE api_key_hash = :api_key_hash
-                """
-            ),
-            {"api_key_hash": api_key_hash},
-        ).mappings().first()
+        result = validate_api_key(connection, api_key)
 
         if not result:
             print("INVALID API KEY")
-            return
-
-        if not result["is_active"]:
-            print("API KEY IS DISABLED")
             return
 
         print()

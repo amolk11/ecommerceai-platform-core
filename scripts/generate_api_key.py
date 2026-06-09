@@ -6,13 +6,11 @@ import sys
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 
+from platform_core.auth import hash_api_key
+
 
 def generate_api_key() -> str:
     return f"cai_sk_{secrets.token_urlsafe(32)}"
-
-
-def hash_api_key(api_key: str) -> str:
-    return hashlib.sha256(api_key.encode()).hexdigest()
 
 
 def get_next_api_key_id(connection) -> str:
@@ -33,9 +31,7 @@ def get_next_api_key_id(connection) -> str:
 def main() -> None:
 
     if len(sys.argv) != 2:
-        print(
-            "Usage: python scripts/generate_api_key.py <client_id>"
-        )
+        print("Usage: python scripts/generate_api_key.py <client_id>")
         sys.exit(1)
 
     client_id = sys.argv[1]
@@ -63,9 +59,7 @@ def main() -> None:
         ).scalar()
 
         if not client_exists:
-            raise ValueError(
-                f"Client '{client_id}' does not exist."
-            )
+            raise ValueError(f"Client '{client_id}' does not exist.")
 
         api_key = generate_api_key()
 
@@ -109,3 +103,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    
