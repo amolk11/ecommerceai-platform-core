@@ -38,10 +38,10 @@ def main() -> None:
 
     load_dotenv()
 
-    database_url = os.getenv("DATABASE_URL")
+    database_url = os.getenv("DB_URL")
 
     if not database_url:
-        raise ValueError("DATABASE_URL not found")
+        raise ValueError("DB_URL not found")
 
     engine = create_engine(database_url)
 

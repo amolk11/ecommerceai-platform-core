@@ -79,7 +79,7 @@ def run_sql_files(database_url: str) -> None:
 def main() -> None:
     load_dotenv()
 
-    database_url = os.getenv("DATABASE_URL")
+    database_url = os.getenv("DB_URL")
 
     if not database_url:
         raise ValueError(
