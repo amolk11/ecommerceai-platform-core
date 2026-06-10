@@ -1,7 +1,3 @@
-from platform_core.auth import validate_api_key
-from platform_core.validation import validate_platform_infrastructure
+# platform_core/__init__.py
 
-__all__ = [
-    "validate_api_key",
-    "validate_platform_infrastructure",
-]
+__version__ = "0.1.1"
