@@ -14,7 +14,6 @@ def get_platform_engine() -> Engine:
     global _engine
 
     if _engine is None:
-
         settings = get_settings()
 
         _engine = create_engine(

@@ -34,9 +34,7 @@ def validate_required_tables() -> None:
     engine = get_platform_engine()
 
     with engine.connect() as connection:
-
         for table_name in required_tables:
-
             exists = connection.execute(query, {"table_name": table_name}).scalar()
 
             if not exists:
@@ -61,8 +59,9 @@ def validate_internal_client() -> None:
     engine = get_platform_engine()
 
     with engine.connect() as connection:
-
-        exists = connection.execute(query, {"client_id": "commerceai-internal"}).scalar()
+        exists = connection.execute(
+            query, {"client_id": "commerceai-internal"}
+        ).scalar()
 
     if not exists:
         raise RuntimeError("commerceai-internal client not found")
@@ -78,4 +77,3 @@ def validate_platform_infrastructure() -> None:
     validate_required_tables()
 
     validate_internal_client()
-    

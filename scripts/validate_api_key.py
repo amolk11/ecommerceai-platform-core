@@ -25,7 +25,6 @@ def main() -> None:
     engine = create_engine(database_url)
 
     with engine.connect() as connection:
-
         result = validate_api_key(connection, api_key)
 
         if not result:
@@ -42,4 +41,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    

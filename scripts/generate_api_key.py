@@ -1,4 +1,3 @@
-import hashlib
 import os
 import secrets
 import sys
@@ -46,7 +45,6 @@ def main() -> None:
     engine = create_engine(database_url)
 
     with engine.begin() as connection:
-
         client_exists = connection.execute(
             text(
                 """
@@ -103,4 +101,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    

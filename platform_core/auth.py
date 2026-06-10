@@ -11,9 +11,10 @@ def validate_api_key(connection, api_key: str) -> dict | None:
 
     api_key_hash = hash_api_key(api_key)
 
-    result = connection.execute(
-        text(
-            """
+    result = (
+        connection.execute(
+            text(
+                """
             SELECT
                 ak.api_key_id,
                 c.client_id,
@@ -24,8 +25,12 @@ def validate_api_key(connection, api_key: str) -> dict | None:
                 ON ak.client_id = c.client_id
             WHERE ak.api_key_hash = :api_key_hash
             """
-        ),
-        {"api_key_hash": api_key_hash}).mappings().first()
+            ),
+            {"api_key_hash": api_key_hash},
+        )
+        .mappings()
+        .first()
+    )
 
     if not result:
         return None

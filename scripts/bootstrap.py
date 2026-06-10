@@ -12,18 +12,11 @@ def create_database_if_not_exists(database_url: str) -> None:
 
     database_name = parsed.path.lstrip("/")
 
-    postgres_url = database_url.replace(
-        f"/{database_name}",
-        "/postgres"
-    )
+    postgres_url = database_url.replace(f"/{database_name}", "/postgres")
 
-    engine = create_engine(
-        postgres_url,
-        isolation_level="AUTOCOMMIT"
-    )
+    engine = create_engine(postgres_url, isolation_level="AUTOCOMMIT")
 
     with engine.connect() as connection:
-
         result = connection.execute(
             text(
                 """
@@ -40,9 +33,7 @@ def create_database_if_not_exists(database_url: str) -> None:
         if not exists:
             print(f"Creating database: {database_name}")
 
-            connection.execute(
-                text(f'CREATE DATABASE "{database_name}"')
-            )
+            connection.execute(text(f'CREATE DATABASE "{database_name}"'))
 
             print("Database created successfully.")
 
@@ -62,14 +53,10 @@ def run_sql_files(database_url: str) -> None:
         return
 
     with engine.begin() as connection:
-
         for sql_file in sql_files:
-
             print(f"Executing: {sql_file.name}")
 
-            sql_content = sql_file.read_text(
-                encoding="utf-8"
-            )
+            sql_content = sql_file.read_text(encoding="utf-8")
 
             connection.execute(text(sql_content))
 
@@ -82,9 +69,7 @@ def main() -> None:
     database_url = os.getenv("DB_URL")
 
     if not database_url:
-        raise ValueError(
-            "DATABASE_URL not found in .env"
-        )
+        raise ValueError("DATABASE_URL not found in .env")
 
     create_database_if_not_exists(database_url)
 
