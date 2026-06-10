@@ -15,14 +15,17 @@ def validate_api_key(connection, api_key: str) -> dict | None:
         text(
             """
             SELECT
-                api_key_id,
-                client_id,
-                is_active
-            FROM api_keys
-            WHERE api_key_hash = :api_key_hash
+                ak.api_key_id,
+                c.client_id,
+                c.client_name,
+                c.is_active
+            FROM api_keys ak
+            JOIN clients c
+                ON ak.client_id = c.client_id
+            WHERE ak.api_key_hash = :api_key_hash
             """
         ),
-        {"api_key_hash": api_key_hash},).mappings().first()
+        {"api_key_hash": api_key_hash}).mappings().first()
 
     if not result:
         return None
